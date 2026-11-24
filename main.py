@@ -18,16 +18,36 @@ EXCUSE = (
 )
 
 
-def validate(text: str) -> None:
-    """Check the excuse against the competition gate."""
+def _check_not_empty(text: str) -> None:
+    """Gate 1: the excuse must contain more than whitespace."""
     if not text or not text.strip():
         raise ValueError("excuse must not be empty or only whitespace")
+
+
+def _check_single_line(text: str) -> None:
+    """Gate 2: the excuse must be exactly one line."""
     if "\n" in text or "\r" in text:
         raise ValueError("excuse must be a single line")
+
+
+def _check_length(text: str) -> None:
+    """Gate 3: the excuse must fit the 200-character limit."""
     if len(text) > 200:
         raise ValueError(
             f"excuse is {len(text)} characters, over the 200 limit"
         )
+
+
+def validate(text: str) -> None:
+    """Check the excuse against the competition gate.
+
+    The gate is three separate rules — non-empty, single line, and
+    at most 200 characters — each enforced by its own helper so a
+    failure names exactly which rule the text broke.
+    """
+    _check_not_empty(text)
+    _check_single_line(text)
+    _check_length(text)
 
 
 def main() -> int:
